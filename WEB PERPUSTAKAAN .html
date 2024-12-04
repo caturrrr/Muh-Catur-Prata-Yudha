@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Manajemen Perpustakaan</title>
+    <style>
+        /* Halaman Login */
+        #login-container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f7fc;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-left {
+            width: 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eaf0f7;
+        }
+
+        .login-left img {
+            max-width: 80%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-right {
+            width: 60%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-right h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: left;
+        }
+
+        .login-right p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .login-right input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .login-right button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .login-right button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-right a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .login-right a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard dan Navigasi */
+        #dashboard-container {
+            background: url('latar belakang 2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            color: #444;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            background: rgba(240, 240, 240, 0.8);
+        }
+
+        nav a:hover {
+            background: #aa6f39;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #aa6f39;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #aa6f39;
+            color: white;
+        }
+
+        #profile-preview-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #profile-preview {
+            display: none;
+            margin: 0 auto;
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+        }
+        table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center; /* Teks di tengah horizontal */
+    vertical-align: middle; /* Teks di tengah vertikal */
+}
+
+th {
+    background-color: #aa6f39;
+    color: white;
+}
+
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Halaman Login -->
+    <div id="login-container" style="display: flex;">
+        <div class="login-left">
+            <img src="foto login.png" alt="Library Image">
+        </div>
+        <div class="login-right">
+            <h2>Hello Admin! Let's Get Started</h2>
+            <p>Enter your details below:</p>
+            <input type="text" id="username" placeholder="Username" value="admin">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Sign In</button>
+            <a href="https://www.instagram.com/adven.book/" target="_blank">Visit us on Instagram</a>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-container" style="display: none;">
+        <nav>
+            <a href="#" onclick="showSection('home')">Beranda</a>
+            <a href="#" onclick="showSection('pengunjung')">Pengunjung</a>
+            <a href="#" onclick="showSection('data-buku')">Buku</a>
+            <a href="#" onclick="showSection('transaksi')">Transaksi</a>
+            <a href="#" onclick="showSection('pengaturan')">Pengaturan</a>
+            <a href="#" onclick="logout()">Keluar</a>
+        </nav>
+
+        <div class="container">
+            <!-- Halaman Beranda -->
+            <div id="home" class="section active">
+                <h2>Beranda</h2>
+                <p>Selamat datang di Sistem Manajemen Perpustakaan.</p>
+            </div>
+
+            <!-- Bagian Data Buku -->
+            <div id="data-buku" class="section">
+                <h2>Data Buku</h2>
+                <input type="text" id="book-code" placeholder="Kode Buku">
+                <input type="text" id="book-title" placeholder="Judul Buku">
+                <select id="book-genre">
+                    <option value="" selected="selected">Pilih Genre</option>
+                    <option value="Fiksi">Fiksi</option>
+                    <option value="Non-Fiksi">Non-Fiksi</option>
+                    <option value="Sains">Sains</option>
+                    <option value="Sejarah">Sejarah</option>
+                    <option value="Biografi">Biografi</option>
+                </select>
+                <button onclick="addBook()">Tambah Buku</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kode Buku</th>
+                            <th>Judul Buku</th>
+                            <th>Genre</th>
+                        </tr>
+                    </thead>
+                    <tbody id="book-list"><tr>
+                        <td>01</td>
+                        <td>To Kill a Mockingbird - Harper Lee</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>1984 - George Orwell</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>The Great Gatsby - F. Scott Fitzgerald</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>The Alchemist - Paulo Coelho</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>The Hobbit - J.R.R. Tolkien</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>Laskar Pelangi - Andrea Hirata</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>Bumi Manusia - Pramoedya Ananta Toer</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>Perahu Kertas - Dee Lestari</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>Supernova: Ksatria, Puteri, dan Bintang Jatuh - Dee Lestari</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>01</td>
+                        <td>Hujan - Tere Liye</td>
+                        <td>Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Sapiens: A Brief History of Humankind - Yuval Noah Harari</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Atomic Habits - James Clear</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Becoming - Michelle Obama</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>The Power of Now - Eckhart Tolle</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Educated - Tara Westover</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Catatan Najwa - Najwa Shihab</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Filosofi Teras - Henry Manampiring</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Manusia Indonesia - Mochtar Lubis</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Titik Nol: Makna Sebuah Perjalanan - Agustinus Wibowo</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>02</td>
+                        <td>Habibie &amp; Ainun - Bacharuddin Jusuf Habibie</td>
+                        <td>Non-Fiksi</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>A Brief History of Time - Stephen Hawking</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>The Selfish Gene - Richard Dawkins</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Cosmos - Carl Sagan</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Why We Sleep: Unlocking the Power of Sleep and Dreams - Matthew Walker</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>The Immortal Life of Henrietta Lacks - Rebecca Skloot</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Sains dalam Al-Quran - Nadiah Thayyarah</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Fisika Itu Menyenangkan - Yohanes Surya</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Jejak Langkah Sains - Priyo Purwanto</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Sains untuk Pemula - Widodo Budiharto</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>03</td>
+                        <td>Dunia Sophie (Bab Sains dalam Filsafat) - Jostein Gaarder (terjemahan)</td>
+                        <td>Sains</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Sapiens: A Brief History of Humankind - Yuval Noah Harari</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Guns, Germs, and Steel - Jared Diamond</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>The Silk Roads: A New History of the World - Peter Frankopan</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>The History of the Ancient World - Susan Wise Bauer</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>The Diary of a Young Girl - Anne Frank</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Bumi Manusia - Pramoedya Ananta Toer</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Jejak Langkah - Pramoedya Ananta Toer</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Revolusi Indonesia - Anthony Reid</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Sejarah Kecil: Petite Histoire Indonesia - Rosihan Anwar</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>04</td>
+                        <td>Imperium Majapahit - Slamet Muljana</td>
+                        <td>Sejarah</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>I Am Malala - Malala Yousafzai</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Open: An Autobiography - Andre Agassi</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Alexander Hamilton - Ron Chernow</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Leonardo da Vinci - Walter Isaacson</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Churchill: Walking with Destiny - Andrew Roberts</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Oei Tiong Ham: Raja Gula dari Semarang - Benny G. Setiono</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Raden Dewi Sartika - Ajip Rosidi</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Ki Hajar Dewantara: Bapak Pendidikan Nasional - Dedi Supriyadi</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Cut Nyak Dien: Srikandi Perang Aceh - Sinar Zamzam Noor</td>
+                        <td>Biografi</td>
+                     </tr><tr>
+                        <td>05</td>
+                        <td>Tan Malaka: Dari Penjara ke Penjara - Tan Malaka</td>
+                        <td>Biografi</td>
+                     </tr></tbody>
+                </table>
+            </div>
+            
+            <!-- Halaman Transaksi -->
+            <div id="transaksi" class="section">
+                <h2>Transaksi</h2>
+                <h3>Pinjaman Buku</h3>
+                <input type="text" id="transaction-code" placeholder="Kode Buku">
+                <input type="text" id="borrower-name" placeholder="Nama Peminjam">
+                <input type="date" id="borrow-date" placeholder="Tanggal Pinjam">
+                <button onclick="addTransaction()">Tambah Transaksi</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kode Buku</th>
+                            <th>Nama Peminjam</th>
+                            <th>Tanggal Pinjam</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-list"></tbody>
+                </table>
+
+                <h3>Pengembalian Buku</h3>
+                <input type="text" id="return-code" placeholder="Kode Buku">
+                <input type="text" id="returner-name" placeholder="Nama Pengembali">
+                <input type="date" id="return-date" placeholder="Tanggal Kembali">
+                <button onclick="addReturn()">Tambah Pengembalian</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kode Buku</th>
+                            <th>Nama Pengembali</th>
+                            <th>Tanggal Kembali</th>
+                        </tr>
+                    </thead>
+                    <tbody id="return-list"></tbody>
+                </table>
+            </div>
+
+            <!-- Halaman Pengunjung -->
+            <div id="pengunjung" class="section">
+                <h2>Daftar Pengunjung</h2>
+                <input type="text" id="visitor-name" placeholder="Nama Pengunjung">
+                <input type="text" id="visitor-id" placeholder="ID Pengunjung">
+                <button onclick="addVisitor()">Tambah Pengunjung</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Pengunjung</th>
+                            <th>ID Pengunjung</th>
+                        </tr>
+                    </thead>
+                    <tbody id="visitor-list"></tbody>
+                </table>
+            </div>
+
+            <!-- Halaman Pengaturan -->
+            <div id="pengaturan" class="section">
+                <h2>Pengaturan</h2>
+                <p>Unggah Foto Profil:</p>
+                <input type="file" id="profile-pic" accept="image/*" onchange="uploadProfilePic()">
+                <div id="profile-preview-container">
+                    <img id="profile-preview" src="data:image/jpeg;base64,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" alt="Foto Profil" style="display: block;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "1234") {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("dashboard-container").style.display = "block";
+            } else {
+                alert("Nama pengguna atau kata sandi salah!");
+            }
+        }
+
+        function logout() {
+            document.getElementById("dashboard-container").style.display = "none";
+            document.getElementById("login-container").style.display = "flex";
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function addBook() {
+    const bookCode = document.getElementById("book-code").value.trim();
+    const bookTitle = document.getElementById("book-title").value.trim();
+    const bookGenre = document.getElementById("book-genre").value;
+
+    // Pastikan semua input terisi
+    if (bookCode && bookTitle && bookGenre) {
+        // Buat baris tabel
+        const row = `<tr>
+                        <td>${bookCode}</td>
+                        <td>${bookTitle}</td>
+                        <td>${bookGenre}</td>
+                     </tr>`;
+        document.getElementById("book-list").innerHTML += row;
+
+        // Reset input setelah menambahkan
+        document.getElementById("book-code").value = "";
+        document.getElementById("book-title").value = "";
+        document.getElementById("book-genre").value = "";
+    } else {
+        // Jika ada input yang kosong
+        alert("Harap isi semua kolom dengan benar!");
+    }
+}
+
+
+        function addTransaction() {
+            const code = document.getElementById("transaction-code").value;
+            const name = document.getElementById("borrower-name").value;
+            const date = document.getElementById("borrow-date").value;
+
+            if (code && name && date) {
+                const row = `<tr><td>${code}</td><td>${name}</td><td>${date}</td></tr>`;
+                document.getElementById("transaction-list").innerHTML += row;
+                document.getElementById("transaction-code").value = "";
+                document.getElementById("borrower-name").value = "";
+                document.getElementById("borrow-date").value = "";
+            } else {
+                alert("Harap isi semua kolom!");
+            }
+        }
+
+        function addReturn() {
+            const code = document.getElementById("return-code").value;
+            const name = document.getElementById("returner-name").value;
+            const date = document.getElementById("return-date").value;
+
+            if (code && name && date) {
+                const row = `<tr><td>${code}</td><td>${name}</td><td>${date}</td></tr>`;
+                document.getElementById("return-list").innerHTML += row;
+                document.getElementById("return-code").value = "";
+                document.getElementById("returner-name").value = "";
+                document.getElementById("return-date").value = "";
+            } else {
+                alert("Harap isi semua kolom!");
+            }
+        }
+
+        function addVisitor() {
+            const visitorName = document.getElementById("visitor-name").value;
+            const visitorId = document.getElementById("visitor-id").value;
+
+            if (visitorName && visitorId) {
+                const row = `<tr><td>${visitorName}</td><td>${visitorId}</td></tr>`;
+                document.getElementById("visitor-list").innerHTML += row;
+                document.getElementById("visitor-name").value = "";
+                document.getElementById("visitor-id").value = "";
+            } else {
+                alert("Harap isi semua kolom!");
+            }
+        }
+
+        function uploadProfilePic() {
+            const fileInput = document.getElementById("profile-pic");
+            const preview = document.getElementById("profile-preview");
+
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = "none";
+            }
+        }
+    </script>
+
+
+</body></html>
